@@ -18,7 +18,7 @@ class TwitterClient(object):
             fetched_tweets = self.tweepyAPI.search(q = query, count = count)
             for tweet in fetched_tweets:
                 if tweet.retweet_count > 0:
-                    # event if tweet has retweets, append only once
+                    # even if tweet has retweets, append only once
                     if tweet not in tweets:
                         tweets.append(tweet)
                 else:
