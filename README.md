@@ -1,1 +1,1 @@
-# twitter-sentiment-analyzer
+# sentiment-analytics
