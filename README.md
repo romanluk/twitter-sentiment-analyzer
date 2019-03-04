@@ -1,1 +1,7 @@
-# sentiment-analytics
+# Sentiment Analytics
+
+## Setup
+
+```sh
+pipenv install
+```
