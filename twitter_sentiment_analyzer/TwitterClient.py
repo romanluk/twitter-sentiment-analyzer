@@ -1,5 +1,5 @@
 import tweepy
-import config
+from twitter_sentiment_analyzer.config import *
 
 from tweepy import OAuthHandler
 
