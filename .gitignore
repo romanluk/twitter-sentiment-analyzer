@@ -108,6 +108,3 @@ venv.bak/
 
 # VSCode
 .vscode/
-
-# Custom
-config.py
