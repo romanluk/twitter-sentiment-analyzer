@@ -22,5 +22,6 @@ def setup():
     app.run(debug = True)
 
 def prepareTwitterClient():
-    TwitterClient(TwitterStreamListener(), ['Donald'])
+    twitter_client = TwitterClient(TwitterStreamListener())
+    twitter_client.filter(['Donald'])
 setup()
