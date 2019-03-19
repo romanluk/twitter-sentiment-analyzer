@@ -16,8 +16,9 @@ class TwitterClient:
             print("Error: Authentication Failed")
 
 class TwitterStreamListener(StreamListener):
+    def __init__(self):
+        self.terminate = False
+
     def on_data(self, data):
         print(data)
-    
-    def on_error(self, status):
-        print(status)
+        return not self.terminate
