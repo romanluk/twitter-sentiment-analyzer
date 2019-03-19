@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/search-terms', methods=['GET', 'POST'])
 def searchTerms():
     if request.method == 'POST':
-        with open('terms.csv', 'a') as terms_file:
+        with open('data/terms.csv', 'a') as terms_file:
             terms_writer = csv.writer(terms_file, delimiter=',')
             term = request.form.get('term')
             terms_writer.writerow([term])
@@ -22,5 +22,5 @@ def setup():
     app.run(debug = True)
 
 def prepareTwitterClient():
-    TwitterClient(TwitterStreamListener())
+    TwitterClient(TwitterStreamListener(), ['Donald'])
 setup()

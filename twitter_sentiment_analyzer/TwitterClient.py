@@ -6,12 +6,12 @@ from tweepy import Stream
 from tweepy.streaming import StreamListener
 
 class TwitterClient:
-    def __init__(self, listener):
+    def __init__(self, listener, tracks):
         try:
             auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
             auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
             twitterStream = Stream(auth, listener)
-            twitterStream.filter(track=['Pepsi'])
+            twitterStream.filter(track=tracks)
         except:
             print("Error: Authentication Failed")
 
