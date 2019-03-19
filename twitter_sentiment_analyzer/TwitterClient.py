@@ -2,28 +2,22 @@ import tweepy
 from twitter_sentiment_analyzer.config import *
 
 from tweepy import OAuthHandler
+from tweepy import Stream
+from tweepy.streaming import StreamListener
 
-class TwitterClient(object):
-    def __init__(self):
+class TwitterClient:
+    def __init__(self, listener):
         try:
-            self.auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-            self.auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
-            self.tweepyAPI = tweepy.API(self.auth)
+            auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+            auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+            twitterStream = Stream(auth, listener)
+            twitterStream.filter(track=['Pepsi'])
         except:
             print("Error: Authentication Failed")
 
-    def get_tweets(self, query, count):
-        tweets = []
-        try:
-            fetched_tweets = self.tweepyAPI.search(q = query, count = count)
-            for tweet in fetched_tweets:
-                if tweet.retweet_count > 0:
-                    # even if tweet has retweets, append only once
-                    if tweet not in tweets:
-                        tweets.append(tweet)
-                else:
-                    tweets.append(tweet)
-            return tweets
-
-        except tweepy.TweepError as e:
-            print("Error : " + str(e))
+class TwitterStreamListener(StreamListener):
+    def on_data(self, data):
+        print(data)
+    
+    def on_error(self, status):
+        print(status)

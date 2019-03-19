@@ -1,7 +1,7 @@
 from flask import Flask, abort, request, jsonify
 import csv
 import sys
-from  twitter_sentiment_analyzer.TwitterClient import TwitterClient
+from  twitter_sentiment_analyzer.TwitterClient import TwitterClient, TwitterStreamListener
 
 app = Flask(__name__)
 
@@ -22,6 +22,5 @@ def setup():
     app.run(debug = True)
 
 def prepareTwitterClient():
-    twitter_client = TwitterClient()
-
+    TwitterClient(TwitterStreamListener())
 setup()
