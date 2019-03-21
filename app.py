@@ -13,8 +13,9 @@ def searchTerms():
             os.makedirs('data')
         with open('data/terms.csv', 'a+') as terms_file:
             terms_writer = csv.writer(terms_file, delimiter=',')
+            userId = request.form.get('userId')
             term = request.form.get('term')
-            terms_writer.writerow([term])
+            terms_writer.writerow([userId, term])
             return jsonify(success = True, message = 'Success', data = term), 200
     elif request.method == 'GET':
         pass
