@@ -1,6 +1,7 @@
 from flask import Flask, abort, request, jsonify
 import csv
 import sys
+import os
 from  twitter_sentiment_analyzer.TwitterClient import TwitterClient, TwitterStreamListener
 
 app = Flask(__name__)
@@ -8,7 +9,9 @@ app = Flask(__name__)
 @app.route('/search-terms', methods=['GET', 'POST'])
 def searchTerms():
     if request.method == 'POST':
-        with open('data/terms.csv', 'a') as terms_file:
+        if not os.path.exists('data'):
+            os.makedirs('data')
+        with open('data/terms.csv', 'a+') as terms_file:
             terms_writer = csv.writer(terms_file, delimiter=',')
             term = request.form.get('term')
             terms_writer.writerow([term])
