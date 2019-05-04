@@ -111,3 +111,4 @@ venv.bak/
 
 # Custom
 config.py
+service_account_key.json
