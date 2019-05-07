@@ -110,4 +110,6 @@ venv.bak/
 .vscode/
 
 # Custom
+config.py
+service_account_key.json
 data/
