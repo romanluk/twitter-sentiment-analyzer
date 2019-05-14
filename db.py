@@ -25,3 +25,7 @@ class FirestoreDb(object):
             u'start' : period_data.start,
             u'end' : period_data.end
         })
+
+    def get_dashboards(self, user_id):
+        dashboards = self.db.collection(u'users').document(user_id).collection(u'dashboards').get()
+        return [Dashboard.from_dict(dashboard.to_dict()) for dashboard in dashboards]
