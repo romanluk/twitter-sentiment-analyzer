@@ -3,11 +3,23 @@ from firebase_admin import credentials, firestore
 from entities import User, Dashboard, ReportPeriod
 
 class FirestoreDb(object):
+    __instance = None
+
+    @staticmethod
+    def get_instance():
+        if FirestoreDb.__instance == None:
+            FirestoreDb()
+        return FirestoreDb.__instance        
+
     def __init__(self):
-        cred = credentials.Certificate('./service_account_key.json')
-        firebase_admin.initialize_app(cred)
-        self.db = firestore.client()
-        print("Firestore DB class initialized")
+        if FirestoreDb.__instance != None:
+            raise Exception("FirestoreDb::constructor called on singleton class")
+        else:
+            cred = credentials.Certificate('./service_account_key.json')
+            firebase_admin.initialize_app(cred)
+            self.db = firestore.client()
+            print("Firestore DB class initialized")
+            FirestoreDb.__instance = self
 
     def add_user(self, uid):
         self.db.collection(u'users').document(uid).set({})
