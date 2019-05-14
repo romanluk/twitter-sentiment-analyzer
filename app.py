@@ -49,7 +49,7 @@ def dashboards():
 
 
 def setup():
-    prepareTwitterClient()
+    # prepareTwitterClient()
     app.run(debug = True)
 
 def prepareTwitterClient():
