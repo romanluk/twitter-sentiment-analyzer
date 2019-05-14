@@ -3,6 +3,7 @@ import csv
 import sys
 import os
 from  twitter_sentiment_analyzer.TwitterClient import TwitterClient, TwitterStreamListener
+from db import FirestoreDb
 
 app = Flask(__name__)
 
@@ -20,6 +21,15 @@ def searchTerms():
     elif request.method == 'GET':
         pass
 
+@app.route('/dashboards', methods=['GET'])
+def dashboards():
+    user_id = request.args.get('user_id')
+    if user_id:
+        db = FirestoreDb.get_instance()
+        dashboards = db.get_dashboards(user_id)
+        return jsonify(success = True, data = [dashboard.serialize() for dashboard in dashboards])
+    else:
+        return jsonify(success = False, Message = "Missing mandatory parameter user_id")
 
 def setup():
     prepareTwitterClient()
