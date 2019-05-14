@@ -33,9 +33,10 @@ def dashboards():
         else:
             return jsonify(success = False, Message = "Missing mandatory parameter user_id")
     elif request.method == 'POST':
-        user_id = request.form.get('user_id')
-        title = request.form.get('title')
-        search_term = request.form.get('search_term')
+        payload = request.get_json()
+        user_id = payload.get('user_id')
+        title = payload.get('title')
+        search_term = payload.get('search_term')
         if user_id and title and search_term:
             db = FirestoreDb.get_instance()
             dashboard = Dashboard()
