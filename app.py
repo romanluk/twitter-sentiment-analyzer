@@ -4,6 +4,7 @@ import sys
 import os
 from  twitter_sentiment_analyzer.TwitterClient import TwitterClient, TwitterStreamListener
 from db import FirestoreDb
+from entities import Dashboard
 
 app = Flask(__name__)
 
@@ -21,15 +22,30 @@ def searchTerms():
     elif request.method == 'GET':
         pass
 
-@app.route('/dashboards', methods=['GET'])
+@app.route('/dashboards', methods=['GET', 'POST'])
 def dashboards():
-    user_id = request.args.get('user_id')
-    if user_id:
-        db = FirestoreDb.get_instance()
-        dashboards = db.get_dashboards(user_id)
-        return jsonify(success = True, data = [dashboard.serialize() for dashboard in dashboards])
-    else:
-        return jsonify(success = False, Message = "Missing mandatory parameter user_id")
+    if request.method == 'GET':
+        user_id = request.args.get('user_id')
+        if user_id:
+            db = FirestoreDb.get_instance()
+            dashboards = db.get_dashboards(user_id)
+            return jsonify(success = True, data = [dashboard.serialize() for dashboard in dashboards])
+        else:
+            return jsonify(success = False, Message = "Missing mandatory parameter user_id")
+    elif request.method == 'POST':
+        user_id = request.form.get('user_id')
+        title = request.form.get('title')
+        search_term = request.form.get('search_term')
+        if user_id and title and search_term:
+            db = FirestoreDb.get_instance()
+            dashboard = Dashboard()
+            dashboard.title = title
+            dashboard.search_term = search_term
+            db.add_dashboard(user_id, dashboard)
+            return jsonify(success = True)
+        else:
+            return jsonify(success = False, Message = "Missing mandatory parameter (e.g. user_id/title/search_term)")
+
 
 def setup():
     prepareTwitterClient()
