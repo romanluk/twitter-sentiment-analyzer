@@ -5,6 +5,7 @@ class User(object):
 
 class Dashboard(object):
     def __init__(self):
+        self.id = ""
         self.title = ""
         self.search_term = ""
         self.periods = []
@@ -12,6 +13,7 @@ class Dashboard(object):
     @staticmethod
     def from_dict(src):
         dashboard = Dashboard()
+        dashboard.id = src.get('id')
         dashboard.title = src.get('title')
         dashboard.search_term = src.get('search_term')
         dashboard.periods = src.get('periods')
@@ -19,6 +21,7 @@ class Dashboard(object):
 
     def serialize(self):
         return {
+            'id' : self.id,
             'title' : self.title,
             'search_term' : self.search_term,
             'periods' : [period.serialize() for period in self.periods] if self.periods != None else []
