@@ -40,4 +40,9 @@ class FirestoreDb(object):
 
     def get_dashboards(self, user_id):
         dashboards = self.db.collection(u'users').document(user_id).collection(u'dashboards').get()
-        return [Dashboard.from_dict(dashboard.to_dict()) for dashboard in dashboards]
+        dashboardsDicts = []
+        for dashboard in dashboards:
+            dashboardDict = dashboard.to_dict()
+            dashboardDict['id'] = dashboard.id
+            dashboardsDicts.append(dashboardDict)
+        return [Dashboard.from_dict(dashboardDict) for dashboardDict in dashboardsDicts]
