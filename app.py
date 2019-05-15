@@ -5,6 +5,7 @@ import os
 from  twitter_sentiment_analyzer.TwitterClient import TwitterClient, TwitterStreamListener
 from db import FirestoreDb
 from entities import Dashboard
+from worker import Worker
 
 app = Flask(__name__)
 
@@ -35,10 +36,8 @@ def dashboards():
 
 
 def setup():
-    # prepareTwitterClient()
+    worker = Worker.get_instance()
+    worker.start()
     app.run(debug = True)
 
-def prepareTwitterClient():
-    twitter_client = TwitterClient(TwitterStreamListener())
-    twitter_client.filter(['Donald'])
 setup()
