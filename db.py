@@ -54,3 +54,7 @@ class FirestoreDb(object):
             dashboardDict['id'] = dashboard.id
             dashboardsDicts.append(dashboardDict)
         return [Dashboard.from_dict(dashboardDict) for dashboardDict in dashboardsDicts]
+
+    def get_all_dashboards_meta(self):
+        dashboardsMetaCollection = self.db.collection(u'dashboards').get()
+        return [dashboardMeta.to_dict() for dashboardMeta in dashboardsMetaCollection]
