@@ -24,3 +24,6 @@ class TwitterStreamListener(StreamListener):
     def on_data(self, data):
         print(data)
         return not self.terminate
+
+    def on_error(self, status_code):
+        print("Twitter client error: status code = " + status_code)
