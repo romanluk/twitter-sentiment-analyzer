@@ -22,7 +22,7 @@ class Worker(object):
             self.period_start = 0
             self.tracks = []
             self.terms_dict = {}
-            self.precessed_data = {}
+            self.processed_data = {}
             self.twitter_stram_listener = TwitterStreamListener(self.on_data_callback)
             self.twitter_client = TwitterClient(self.twitter_stram_listener)
             self.db = FirestoreDb.get_instance()
@@ -56,10 +56,10 @@ class Worker(object):
         search_term = Analyzer.determine_track(parsedTweet.get('text'), self.tracks)
         if search_term != None:
             processed = Analyzer.analyze(parsedTweet.get('text'))
-            print(self.precessed_data)
-            processed_data_value = self.precessed_data.get(search_term)
+            print(self.processed_data)
+            processed_data_value = self.processed_data.get(search_term)
             if processed_data_value:
-                self.precessed_data.update({
+                self.processed_data.update({
                     search_term : {
                         'positive' : processed_data_value.get('positive', 0) + processed.get('positive'),
                         'negative' : processed_data_value.get('negative', 0) + processed.get('negative'),
@@ -67,17 +67,17 @@ class Worker(object):
                     }
                 })
             else:
-                self.precessed_data[search_term] = {
+                self.processed_data[search_term] = {
                     'positive' : processed.get('positive'),
                     'negative' : processed.get('negative'),
                     'neutral' : processed.get('neutral')
                 }
-            print(self.precessed_data)
+            print(self.processed_data)
 
     def flush_processed_data(self):
         print('Flushing data...')
-        for key in self.precessed_data:
-            value = self.precessed_data.get(key)
+        for key in self.processed_data:
+            value = self.processed_data.get(key)
             dashboard_id = self.terms_dict.get(key).get('id')
             user_id = self.terms_dict.get(key).get('user_id')
             report_period = ReportPeriod()
@@ -87,7 +87,7 @@ class Worker(object):
             report_period.negative = value.get('negative')
             report_period.neutral = value.get('neutral')
             self.db.add_period_data(user_id, dashboard_id, report_period)
-        self.precessed_data = {}
+        self.processed_data = {}
         self.schedule_next_data_flush()
     
     def schedule_next_data_flush(self):
