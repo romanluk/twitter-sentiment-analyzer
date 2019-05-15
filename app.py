@@ -14,7 +14,7 @@ def dashboards():
         user_id = request.args.get('user_id')
         if user_id:
             db = FirestoreDb.get_instance()
-            dashboards = db.get_dashboards(user_id)
+            dashboards = db.get_dashboards_for_user(user_id)
             return jsonify(success = True, data = [dashboard.serialize() for dashboard in dashboards])
         else:
             return jsonify(success = False, Message = "Missing mandatory parameter user_id")

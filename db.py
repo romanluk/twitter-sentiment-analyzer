@@ -46,7 +46,7 @@ class FirestoreDb(object):
             u'neutral' : period_data.neutral
         })
 
-    def get_dashboards(self, user_id):
+    def get_dashboards_for_user(self, user_id):
         dashboards = self.db.collection(u'users').document(user_id).collection(u'dashboards').get()
         dashboardsDicts = []
         for dashboard in dashboards:
