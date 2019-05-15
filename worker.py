@@ -43,8 +43,6 @@ class Worker(object):
 
     def update_twitter_client_tracks(self):
         self.__update_all_dashboards_meta()
-        # self.twitter_stram_listener.terminate()
-        # self.twitter_stram_listener.__terminate = False
         self.twitter_client.filter(self.tracks)
 
     def start(self):
@@ -56,7 +54,6 @@ class Worker(object):
         search_term = Analyzer.determine_track(parsedTweet.get('text'), self.tracks)
         if search_term != None:
             processed = Analyzer.analyze(parsedTweet.get('text'))
-            print(self.processed_data)
             processed_data_value = self.processed_data.get(search_term)
             if processed_data_value:
                 self.processed_data.update({
@@ -72,7 +69,6 @@ class Worker(object):
                     'negative' : processed.get('negative'),
                     'neutral' : processed.get('neutral')
                 }
-            print(self.processed_data)
 
     def flush_processed_data(self):
         print('Flushing data...')
