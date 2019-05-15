@@ -33,9 +33,12 @@ class FirestoreDb(object):
     
     def add_period_data(self, user_id, dashboard_id, period_data):
         dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
-        dashboards_ref.document(dashboard_id).collection('periods').add({
+        dashboards_ref.document(dashboard_id).collection(u'periods').add({
             u'start' : period_data.start,
-            u'end' : period_data.end
+            u'end' : period_data.end,
+            u'positive' : period_data.positive,
+            u'negative' : period_data.negative,
+            u'neutral' : period_data.neutral
         })
 
     def get_dashboards(self, user_id):
