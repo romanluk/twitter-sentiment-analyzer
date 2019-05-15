@@ -15,12 +15,21 @@ class TwitterClient:
             print("Error: Authentication Failed")
 
     def filter(self, tracks):
-        self.twitterStream.filter(track=tracks)
+        self.twitterStream.disconnect()
+        self.twitterStream.filter(track=tracks, is_async=True)
 
 class TwitterStreamListener(StreamListener):
-    def __init__(self):
-        self.terminate = False
+    def __init__(self, on_data_callback):
+        self.__terminate = False
+        self.on_data_callback = on_data_callback
+
+    def terminate(self):
+        self.__terminate = True
 
     def on_data(self, data):
         print(data)
-        return not self.terminate
+        self.on_data_callback(data)
+        return not self.__terminate
+
+    def on_error(self, status_code):
+        print("Twitter client error: status code = " + status_code)

@@ -31,9 +31,15 @@ class ReportPeriod(object):
     def __init__(self):
         self.start = 0
         self.end = 0
+        self.positive = 0
+        self.negative = 0
+        self.neutral = 0
 
     def serialize(self):
         return {
             'start' : self.start,
-            'end' : self.end
+            'end' : self.end,
+            'positive' : self.positive,
+            'negative' : self.negative,
+            'neutral' : self.neutral
         }

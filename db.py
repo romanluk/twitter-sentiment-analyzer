@@ -25,20 +25,28 @@ class FirestoreDb(object):
         self.db.collection(u'users').document(uid).set({})
 
     def add_dashboard(self, user_id, dashboard):
-        dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
-        dashboards_ref.add({
+        user_dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
+        new_dashboard_ref = user_dashboards_ref.add({
             u'title' : dashboard.title,
             u'search_term' : dashboard.search_term
         })
-    
-    def add_period_data(self, user_id, dashboard_id, period_data):
-        dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
-        dashboards_ref.document(dashboard_id).collection('periods').add({
-            u'start' : period_data.start,
-            u'end' : period_data.end
+        self.db.collection(u'dashboards').add({
+            u'id' : new_dashboard_ref[1].id,
+            u'user_id' : user_id,
+            u'search_term': dashboard.search_term
         })
 
-    def get_dashboards(self, user_id):
+    def add_period_data(self, user_id, dashboard_id, period_data):
+        dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
+        dashboards_ref.document(dashboard_id).collection(u'periods').add({
+            u'start' : period_data.start,
+            u'end' : period_data.end,
+            u'positive' : period_data.positive,
+            u'negative' : period_data.negative,
+            u'neutral' : period_data.neutral
+        })
+
+    def get_dashboards_for_user(self, user_id):
         dashboards = self.db.collection(u'users').document(user_id).collection(u'dashboards').get()
         dashboardsDicts = []
         for dashboard in dashboards:
@@ -46,3 +54,7 @@ class FirestoreDb(object):
             dashboardDict['id'] = dashboard.id
             dashboardsDicts.append(dashboardDict)
         return [Dashboard.from_dict(dashboardDict) for dashboardDict in dashboardsDicts]
+
+    def get_all_dashboards_meta(self):
+        dashboardsMetaCollection = self.db.collection(u'dashboards').get()
+        return [dashboardMeta.to_dict() for dashboardMeta in dashboardsMetaCollection]
