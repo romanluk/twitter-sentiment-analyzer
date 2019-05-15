@@ -25,12 +25,17 @@ class FirestoreDb(object):
         self.db.collection(u'users').document(uid).set({})
 
     def add_dashboard(self, user_id, dashboard):
-        dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
-        dashboards_ref.add({
+        user_dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
+        new_dashboard_ref = user_dashboards_ref.add({
             u'title' : dashboard.title,
             u'search_term' : dashboard.search_term
         })
-    
+        self.db.collection(u'dashboards').add({
+            u'id' : new_dashboard_ref[1].id,
+            u'user_id' : user_id,
+            u'search_term': dashboard.search_term
+        })
+
     def add_period_data(self, user_id, dashboard_id, period_data):
         dashboards_ref = self.db.collection(u'users').document(user_id).collection(u'dashboards')
         dashboards_ref.document(dashboard_id).collection(u'periods').add({
