@@ -30,6 +30,7 @@ def dashboards():
             dashboard.title = title
             dashboard.search_term = search_term
             db.add_dashboard(user_id, dashboard)
+            Worker.get_instance().update_twitter_client_tracks()
             return jsonify(success = True)
         else:
             return jsonify(success = False, Message = "Missing mandatory parameter (e.g. user_id/title/search_term)")
