@@ -15,6 +15,7 @@ class TwitterClient:
             print("Error: Authentication Failed")
 
     def filter(self, tracks):
+        self.twitterStream.disconnect()
         self.twitterStream.filter(track=tracks, is_async=True)
 
 class TwitterStreamListener(StreamListener):
